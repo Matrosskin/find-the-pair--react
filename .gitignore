@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-/build
+# production, docs used just to simlify publishing at GitHub Pages.
+# /docs
 
 # misc
 .DS_Store

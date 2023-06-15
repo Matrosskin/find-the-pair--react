@@ -1,5 +1,6 @@
 {
   "name": "find-the-pair--react",
+  "homepage": "/find-the-pair--react",
   "version": "0.1.0",
   "private": false,
   "dependencies": {
