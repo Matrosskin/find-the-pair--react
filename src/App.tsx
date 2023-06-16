@@ -3,13 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import logo from './logo.svg';
 import './App.scss';
-import rotateReducer from './reducers/counter-reducer';
-import increaseAction from './actions/increase-action';
-import decreaseAction from './actions/decrease-action';
-import increaseActionAsync from './actions/increase-action-async';
+import counterReducer, {
+  IStore, decrease, increase, increaseAsync, read,
+} from './reducers/counter-reducer';
 
 function App() {
-  const rotating = useSelector(rotateReducer);
+  const rotating = useSelector(
+    (state: IStore) => counterReducer(state, read()),
+  );
   const dispatch = useDispatch();
 
   return (
@@ -20,13 +21,13 @@ function App() {
           { JSON.stringify(rotating) }
         </p>
 
-        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increaseAction); }}>
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increase()); }}>
           click Me + 1
         </button>
-        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(decreaseAction); }}>
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(decrease()); }}>
           click Me - 1
         </button>
-        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increaseActionAsync); }}>
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increaseAsync()); }}>
           click Me + 1 Async
         </button>
       </header>
