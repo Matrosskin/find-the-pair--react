@@ -6,6 +6,7 @@ import './App.scss';
 import rotateReducer from './reducers/counter-reducer';
 import increaseAction from './actions/increase-action';
 import decreaseAction from './actions/decrease-action';
+import increaseActionAsync from './actions/increase-action-async';
 
 function App() {
   const rotating = useSelector(rotateReducer);
@@ -24,6 +25,9 @@ function App() {
         </button>
         <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(decreaseAction); }}>
           click Me - 1
+        </button>
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increaseActionAsync); }}>
+          click Me + 1 Async
         </button>
       </header>
     </div>
