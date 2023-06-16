@@ -1,19 +1,19 @@
-.App {
+.ftpr-app {
   text-align: center;
 }
 
-.App-logo {
+.ftpr-app-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+  .ftpr-app-logo {
+    animation: ftpr-app-logo-spin infinite 20s linear;
   }
 }
 
-.App-header {
+.ftpr-app-header {
   background-color: #282c34;
   min-height: 100vh;
   display: flex;
@@ -24,14 +24,15 @@
   color: white;
 }
 
-.App-link {
+.ftpr-app-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
+@keyframes ftpr-app-logo-spin {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
