@@ -1,24 +1,30 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import logo from './logo.svg';
 import './App.scss';
+import rotateReducer from './reducers/counter-reducer';
+import increaseAction from './actions/increase-action';
+import decreaseAction from './actions/decrease-action';
 
 function App() {
+  const rotating = useSelector(rotateReducer);
+  const dispatch = useDispatch();
+
   return (
     <div className="ftpr-app">
       <header className="ftpr-app-header">
         <img src={logo} className="ftpr-app-logo" alt="logo" />
         <p>
-          {/* eslint-disable react/jsx-one-expression-per-line */}
-          Edit <code>src/App.tsx</code> and save to reload.
+          { JSON.stringify(rotating) }
         </p>
-        <a
-          className="ftpr-app-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(increaseAction); }}>
+          click Me + 1
+        </button>
+        <button type="button" className="ftpr-app-btn" onClick={() => { dispatch(decreaseAction); }}>
+          click Me - 1
+        </button>
       </header>
     </div>
   );
