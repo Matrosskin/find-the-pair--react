@@ -11,5 +11,6 @@ module.exports = {
     "plugins": [
     ],
     "rules": {
+      "max-len": ["error", { "code": 120 }]
     }
 }

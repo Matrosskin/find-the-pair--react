@@ -1,18 +1,37 @@
-import { put, takeEvery, all } from 'redux-saga/effects';
+import {
+  put, takeEvery, all, select, call,
+} from 'redux-saga/effects';
+import { ISettings, ActionType as SettingsActionType, settingsFetched } from './reducers/settings.reducer';
 
-const delay = (ms: number) => new Promise((res) => { setTimeout(res, ms); });
-
-export function* increaseAsync() {
-  yield delay(1000);
-  yield put({ type: 'increase' });
+function* fetchSettings() {
+  const settingsStr: string = yield call([localStorage, localStorage.getItem], 'ftpe-settings');
+  const settings: ISettings = settingsStr
+    ? JSON.parse(settingsStr)
+    : {
+      bonusTime: 3,
+      mapSize: 4,
+      durationTime: 1,
+    };
+  yield put(settingsFetched(settings));
 }
 
-export function* watchIncrementAsync() {
-  yield takeEvery('INCREMENT_ASYNC', increaseAsync);
+function* saveSettings() {
+  const settings: ISettings = yield select((state: { settings: ISettings }) => state.settings);
+  yield call([localStorage, localStorage.setItem], 'ftpe-settings', JSON.stringify(settings));
+}
+
+function* watchFetchSettings() {
+  yield takeEvery(SettingsActionType.FETCH_SETTINGS, fetchSettings);
+}
+
+function* watchSaveSettings() {
+  yield takeEvery(SettingsActionType.SAVE_SETTINGS, saveSettings);
 }
 
 export default function* rootSaga() {
   yield all([
-    watchIncrementAsync(),
+    watchSaveSettings(),
+    watchFetchSettings(),
+    fetchSettings(),
   ]);
 }
