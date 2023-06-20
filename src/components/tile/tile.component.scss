@@ -1,0 +1,12 @@
+.game-tile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &.opened-tile {
+    background: radial-gradient(circle, rgba(255,255,255,1) -50%, rgba(255,255,255,0) 70%);
+  }
+}

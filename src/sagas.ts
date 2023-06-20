@@ -2,6 +2,7 @@ import {
   put, takeEvery, all, select, call,
 } from 'redux-saga/effects';
 import { ISettings, ActionType as SettingsActionType, settingsFetched } from './reducers/settings.reducer';
+import { ActionType as BoardActionType, ITileData, setBoard } from './reducers/board.reducer';
 
 function* fetchSettings() {
   const settingsStr: string = yield call([localStorage, localStorage.getItem], 'ftpe-settings');
@@ -28,10 +29,27 @@ function* watchSaveSettings() {
   yield takeEvery(SettingsActionType.SAVE_SETTINGS, saveSettings);
 }
 
+// TODO: At the moment it is not clear how to properly define type for "payload" in "action", so I used "any".
+function* updateTile(action: any) {
+  const board: ITileData[] = yield select((state: { board: ITileData[] }) => state.board);
+  const { updatedTileData } = action.payload;
+  const updatedBoard = board.map((prevTileData: any) => (
+    prevTileData.id === updatedTileData.id
+      ? updatedTileData
+      : prevTileData
+  ));
+  yield put(setBoard(updatedBoard));
+}
+
+function* watchUpdateTile() {
+  yield takeEvery(BoardActionType.UPDATE_TILE, updateTile);
+}
+
 export default function* rootSaga() {
   yield all([
     watchSaveSettings(),
     watchFetchSettings(),
     fetchSettings(),
+    watchUpdateTile(),
   ]);
 }

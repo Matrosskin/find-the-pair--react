@@ -31,10 +31,6 @@
 .board-cell {
   flex: 1 1 0;
   aspect-ratio: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
   border-right: 1px solid rgba( 255, 255, 255, 0.18 );
 
   &:last-of-type {
