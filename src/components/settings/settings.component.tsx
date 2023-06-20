@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import './settings.component.scss';
 import {
   ISettings, fetchSettings, saveSettings, setBonusTime, setDurationTime, setMapSize,
-} from '../reducers/settings.reducer';
+} from '../../reducers/settings.reducer';
 
 const availableSizes = [3, 4, 5, 6, 7, 8, 9];
 const getSizeLabel = (size: number) => `${size}x${size}`;
 
-type SettipgsProps = {
+type SettingsProps = {
   isGamePaused: boolean,
   onStartGame: (settings: ISettings) => void,
   onResumeGame: () => void,
 };
 
-function Settings({ isGamePaused, onStartGame, onResumeGame }: SettipgsProps) {
+function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
   const settingsData = useSelector((store: { settings: ISettings }) => store.settings);
   const dispatch = useDispatch();
 
@@ -33,14 +33,14 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettipgsProps) {
   };
 
   return (
-    <div className="settings-form">
+    <div className="settings-form card">
       <h1>Settings</h1>
 
       <div className="form-line">
         {/* TODO: Need to find e reason why this rule triggers an error even if I used 'htmlFor' */}
         { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
         <label htmlFor="bonusTime">
-          Bonus time to see all pictures at start:
+          Time to see all pictures at start (sec):
         </label>
         <input
           type="number"
@@ -90,14 +90,14 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettipgsProps) {
       <div className="form-line divider" />
 
       <div className="form-line">
-        <button type="button" className="game-btn start-btn" onClick={onStartClick}>Start</button>
+        <button type="button" className="game-btn green-btn" onClick={onStartClick}>Start</button>
       </div>
 
       {
         isGamePaused
         && (
           <div className="form-line">
-            <button type="button" className="game-btn resume-btn" onClick={onResumeClick}>Resume</button>
+            <button type="button" className="game-btn blue-btn" onClick={onResumeClick}>Resume</button>
           </div>
         )
       }
