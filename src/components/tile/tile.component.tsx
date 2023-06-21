@@ -8,12 +8,18 @@ type TileProps = {
   tileData: ITileData
 };
 
+const isTouchDevice = Object.prototype.hasOwnProperty.call(window, 'ontouchstart');
+
 function Tile({ tileData }: TileProps) {
   const dispatch = useDispatch();
 
   const classNames = `game-tile ${tileData.isOpened ? 'opened-tile' : ''}`;
 
-  const onClick = () => {
+  const onClick = (event?: { type: string }) => {
+    if (isTouchDevice && event?.type === 'click') {
+      return;
+    }
+
     if (tileData.isOpened) {
       return;
     }
@@ -35,7 +41,14 @@ function Tile({ tileData }: TileProps) {
   return tileData.isEmpty
     ? <> </>
     : (
-      <div className={classNames} role="button" tabIndex={0} onClick={onClick} onKeyDown={onKeyDown}>
+      <div
+        className={classNames}
+        role="button"
+        tabIndex={0}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
+        onTouchStart={onClick}
+      >
         <svg viewBox="0 0 28 28">
           <text x="14" y="20" textAnchor="middle">
             {
