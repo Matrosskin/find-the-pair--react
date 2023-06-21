@@ -7,6 +7,6 @@
   cursor: pointer;
 
   &.opened-tile {
-    background: radial-gradient(circle, rgba(255,255,255,1) -50%, rgba(255,255,255,0) 70%);
+    background: radial-gradient(circle, rgba(255 255 255 / 100%) -50%, rgba(255 255 255 / 0%) 70%);
   }
 }

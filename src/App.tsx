@@ -1,44 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './App.scss';
 import Settings from './components/settings/settings.component';
-import { ISettings } from './reducers/settings.reducer';
 import Board from './components/board/board.component';
+import { GameStatus, newGameAction, setStartedAction } from './reducers/game-status.reducer';
+import { IGameStore } from './store';
 
 function App() {
-  const [isSettingsVisible, setIsSettingsVisible] = useState(true);
-  const [isGamePaused, setIsGamePaused] = useState(false);
-  const [isBoardVisible, setIsBoardVisible] = useState(false);
-  const [currentGameSettings, setCurrentGameSettings] = useState<ISettings | null>(null);
+  const {
+    isGamePaused,
+    isGameIdle,
+    isGameStarted,
+    isGameWin,
+    isGameLoss,
+  } = useSelector(
+    (state: IGameStore) => ({
+      isGamePaused: state.status.gameStatus === GameStatus.PAUSED,
+      isGameStarted: state.status.gameStatus === GameStatus.STARTED,
+      isGameIdle: state.status.gameStatus === GameStatus.IDLE,
+      isGameWin: state.status.gameStatus === GameStatus.WIN,
+      isGameLoss: state.status.gameStatus === GameStatus.LOSS,
+    }),
+  );
+  const dispatch = useDispatch();
 
-  const onStartGame = (settings: ISettings) => {
-    setCurrentGameSettings(settings);
-    setIsSettingsVisible(false);
-    setIsBoardVisible(true);
-    setIsGamePaused(false);
-  };
-
-  const onPauseGame = () => {
-    setIsGamePaused(true);
-    setIsSettingsVisible(true);
+  const onStartGame = () => {
+    dispatch(newGameAction());
+    dispatch(setStartedAction());
   };
 
   const onResumeGame = () => {
-    setIsSettingsVisible(false);
-    setIsGamePaused(false);
+    dispatch(setStartedAction());
   };
 
   return (
     <div className="ftpr-app">
-      { isBoardVisible && currentGameSettings
+      { (isGamePaused || isGameStarted || isGameWin || isGameLoss)
         && (
-          <Board
-            onPauseGame={onPauseGame}
-            settings={currentGameSettings}
-            isPaused={isGamePaused}
-          />
+          <Board />
         )}
-      { isSettingsVisible
+      { (isGamePaused || isGameIdle)
         && (
           <Settings
             isGamePaused={isGamePaused}

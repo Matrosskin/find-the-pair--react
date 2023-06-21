@@ -3,20 +3,21 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import './settings.component.scss';
 import {
-  ISettings, fetchSettings, saveSettings, setBonusTime, setDurationTime, setMapSize,
+  fetchSettings, saveSettings, setBonusTime, setDurationTime, setMapSize,
 } from '../../reducers/settings.reducer';
+import { IGameStore } from '../../store';
 
 const availableSizes = [3, 4, 5, 6, 7, 8, 9];
 const getSizeLabel = (size: number) => `${size}x${size}`;
 
 type SettingsProps = {
   isGamePaused: boolean,
-  onStartGame: (settings: ISettings) => void,
+  onStartGame: () => void,
   onResumeGame: () => void,
 };
 
 function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
-  const settingsData = useSelector((store: { settings: ISettings }) => store.settings);
+  const settingsData = useSelector((store: IGameStore) => store.settings);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
 
   const onStartClick = () => {
     dispatch(saveSettings());
-    onStartGame(settingsData);
+    onStartGame();
   };
 
   const onResumeClick = () => {

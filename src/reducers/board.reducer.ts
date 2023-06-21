@@ -18,9 +18,10 @@ const reducer = handleActions<ITileData[]>(
 
 export interface ITileData {
   id: number;
-  code: number;
+  emoji: string;
   isOpened: boolean;
   isEmpty?: boolean;
+  isTemporaryOpened?: boolean;
 }
 
 export default reducer;
