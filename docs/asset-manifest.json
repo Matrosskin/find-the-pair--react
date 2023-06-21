@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/find-the-pair--react/static/css/main.dae425af.css",
-    "main.js": "/find-the-pair--react/static/js/main.96a73276.js",
+    "main.css": "/find-the-pair--react/static/css/main.05f6246a.css",
+    "main.js": "/find-the-pair--react/static/js/main.6ac92d14.js",
     "static/js/787.04b1e7bc.chunk.js": "/find-the-pair--react/static/js/787.04b1e7bc.chunk.js",
     "index.html": "/find-the-pair--react/index.html",
-    "main.dae425af.css.map": "/find-the-pair--react/static/css/main.dae425af.css.map",
-    "main.96a73276.js.map": "/find-the-pair--react/static/js/main.96a73276.js.map",
+    "main.05f6246a.css.map": "/find-the-pair--react/static/css/main.05f6246a.css.map",
+    "main.6ac92d14.js.map": "/find-the-pair--react/static/js/main.6ac92d14.js.map",
     "787.04b1e7bc.chunk.js.map": "/find-the-pair--react/static/js/787.04b1e7bc.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dae425af.css",
-    "static/js/main.96a73276.js"
+    "static/css/main.05f6246a.css",
+    "static/js/main.6ac92d14.js"
   ]
 }

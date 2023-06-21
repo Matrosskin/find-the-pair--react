@@ -16,6 +16,7 @@
   padding: 10px;
   border-radius: 6px;
   border: none;
+  font-size: calc(10px + 1.4vmin);
 }
 
 .game-btn {
@@ -40,4 +41,10 @@
 
 .invisible {
   display: none;
+}
+
+.win-card,
+.loss-card {
+  font-size: 80px;
+  padding-top: 50px;
 }

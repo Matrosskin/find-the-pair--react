@@ -6,10 +6,12 @@ import { ISettings } from '../../reducers/settings.reducer';
 import Tile from '../tile/tile.component';
 import { ITileData, setBoard } from '../../reducers/board.reducer';
 import {
-  GameStatus, IStatus, setIdleAction, setLossAction, setPausedAction,
+  GameStatus, IStatus, setLossAction, setPausedAction,
 } from '../../reducers/game-status.reducer';
 import { IGameStore } from '../../store';
 import { generateMap } from '../../utils';
+import GameOver from '../game-over/game-over.component';
+import Winner from '../winner/winner.component';
 
 type BoardProps = {
   board: ITileData[],
@@ -18,7 +20,6 @@ type BoardProps = {
   setBoardState: (board: ITileData[]) => void,
   setPaused: () => void,
   setLoss: () => void,
-  setIdle: () => void,
 };
 
 type BoardState = {
@@ -38,7 +39,6 @@ const mapDispatchToProps = (dispatch: any) => ({
   setBoardState: (newState: ITileData[]) => dispatch(setBoard(newState)),
   setPaused: () => dispatch(setPausedAction()),
   setLoss: () => dispatch(setLossAction()),
-  setIdle: () => dispatch(setIdleAction()),
 });
 
 const connectToStore = connect(mapStateToProps, mapDispatchToProps);
@@ -167,7 +167,7 @@ class Board extends React.Component<BoardProps, BoardState> {
   }
 
   render() {
-    const { setPaused, setIdle, status: { gameStatus } } = this.props;
+    const { setPaused, status: { gameStatus } } = this.props;
     const { leftTime } = this.state;
     const isPaused = gameStatus === GameStatus.PAUSED;
 
@@ -184,9 +184,8 @@ class Board extends React.Component<BoardProps, BoardState> {
           <span>Time left: {Board.formatTime(leftTime)}</span>
           { isStarted
             && <button type="button" className="game-btn blue-btn" onClick={setPaused}>Pause</button> }
-          { (isWin || isLoss)
-            && <button type="button" className="game-btn blue-btn" onClick={setIdle}>Try one more time</button> }
         </div>
+
         { isStarted
           && (
             <div className="board-body card">
@@ -194,19 +193,8 @@ class Board extends React.Component<BoardProps, BoardState> {
             </div>
           )}
 
-        { isWin
-          && (
-            <div className="win-card">
-              🥳
-            </div>
-          )}
-
-        { isLoss
-          && (
-            <div className="loss-card">
-              ☠️
-            </div>
-          )}
+        { isWin && <Winner /> }
+        { isLoss && <GameOver /> }
       </div>
     );
   }

@@ -37,7 +37,7 @@ function Tile({ tileData }: TileProps) {
     : (
       <div className={classNames} role="button" tabIndex={0} onClick={onClick} onKeyDown={onKeyDown}>
         <svg viewBox="0 0 28 28">
-          <text x="14" y="14" textAnchor="middle" alignmentBaseline="central">
+          <text x="14" y="20" textAnchor="middle">
             {
               tileData.isOpened
                 ? tileData.emoji

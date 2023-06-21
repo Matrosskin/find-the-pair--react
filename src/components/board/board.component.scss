@@ -17,6 +17,10 @@
   align-items: center;
 }
 
+.board-body {
+  font-size: initial;
+}
+
 .board-line {
   display: flex;
   flex-direction: row;
@@ -36,9 +40,4 @@
   &:last-of-type {
     border-right: none;
   }
-}
-
-.win-card,
-.loss-card {
-  font-size: 80px;
 }
