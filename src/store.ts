@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
+import { composeWithDevTools } from '@redux-devtools/extension';
 
 import settingsReducer, { ISettings } from './reducers/settings.reducer';
 import boardReducer, { ITileData } from './reducers/board.reducer';
@@ -14,7 +15,9 @@ const store = createStore(
     board: boardReducer,
     status: statusReducer,
   }),
-  applyMiddleware(sagaMiddleware),
+  composeWithDevTools(
+    applyMiddleware(sagaMiddleware),
+  ),
 );
 
 export interface IGameStore {
