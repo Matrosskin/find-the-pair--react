@@ -2,9 +2,10 @@ import {
   put, takeEvery, all, select, call,
 } from 'redux-saga/effects';
 import { ISettings, ActionType as SettingsActionType, settingsFetched } from './reducers/settings.reducer';
-import { ActionType as BoardActionType, ITileData, setBoard } from './reducers/board.reducer';
+import {
+  ITileData, closeTileOpenedTemporary, openTile, openTileTemporary,
+} from './reducers/board.reducer';
 import { setWinAction } from './reducers/game-status.reducer';
-import { updateBoard } from './utils';
 import type { IGameStore } from './store';
 
 function* fetchSettings() {
@@ -34,70 +35,43 @@ function* watchSaveSettings() {
 
 const delay = (ms: number) => new Promise((res) => { setTimeout(res, ms); });
 
-// TODO: At the moment it is not clear how to properly define type for "payload" in "action", so I used "any".
-function* updateTile(action: any) {
-  const board: ITileData[] = yield select((state: IGameStore) => state.board);
-  const { updatedTileData } = action.payload;
+const temporaryOpenedTilesSelector: (state: IGameStore) => ITileData[] = (state: IGameStore) => (
+  state.board.filter((tileData) => tileData.isTemporaryOpened));
 
-  const alreadyOpenedTiles = board.filter((tileData) => tileData.isOpened && tileData.isTemporaryOpened);
-  if (!alreadyOpenedTiles.length) {
-    const updatedBoard = updateBoard(board, [{
-      ...updatedTileData,
-      isTemporaryOpened: true,
-    }]);
+const waitingForOpeningTilesSelector: (state: IGameStore) => ITileData[] = (state: IGameStore) => (
+  state.board.filter((tileData) => !tileData.isOpened && !tileData.isEmpty));
 
-    yield put(setBoard(updatedBoard));
+function* onOpenTileTemporary(action: ReturnType<typeof openTileTemporary>) {
+  const temporaryOpenedTiles: ITileData[] = yield select(temporaryOpenedTilesSelector);
+  if (temporaryOpenedTiles.length < 2) {
     return;
   }
 
-  if (alreadyOpenedTiles.length === 2) {
+  if (temporaryOpenedTiles.length > 2) {
+    yield put(closeTileOpenedTemporary(action.payload.id));
     return;
   }
 
-  if (alreadyOpenedTiles[0].emoji === updatedTileData.emoji) {
-    const updatedBoard = updateBoard(board, [
-      updatedTileData,
-      {
-        ...alreadyOpenedTiles[0],
-        isTemporaryOpened: false,
-      },
-    ]);
+  if (temporaryOpenedTiles[0].emoji === temporaryOpenedTiles[1].emoji) {
+    yield put(openTile(temporaryOpenedTiles[0].id));
+    yield put(openTile(temporaryOpenedTiles[1].id));
 
-    yield put(setBoard(updatedBoard));
-    const closedTile = updatedBoard.find((tile) => (!tile.isOpened || tile.isTemporaryOpened) && !tile.isEmpty);
-    if (!closedTile) {
+    const waitingForOpeningTiles: ITileData[] = yield select(waitingForOpeningTilesSelector);
+    if (!waitingForOpeningTiles.length) {
       yield put(setWinAction());
     }
+
     return;
   }
-
-  let updatedBoard = updateBoard(board, [{
-    ...updatedTileData,
-    isTemporaryOpened: true,
-  }]);
-  yield put(setBoard(updatedBoard));
 
   yield delay(1000);
 
-  const actualBoard: ITileData[] = yield select((state: IGameStore) => state.board);
-  updatedBoard = updateBoard(actualBoard, [
-    {
-      ...updatedTileData,
-      isOpened: false,
-      isTemporaryOpened: false,
-    },
-    {
-      ...alreadyOpenedTiles[0],
-      isOpened: false,
-      isTemporaryOpened: false,
-    },
-  ]);
-
-  yield put(setBoard(updatedBoard));
+  yield put(closeTileOpenedTemporary(temporaryOpenedTiles[0].id));
+  yield put(closeTileOpenedTemporary(temporaryOpenedTiles[1].id));
 }
 
-function* watchUpdateTile() {
-  yield takeEvery(BoardActionType.UPDATE_TILE, updateTile);
+function* watchOpenTileTemporary() {
+  yield takeEvery(openTileTemporary.toString(), onOpenTileTemporary);
 }
 
 export default function* rootSaga() {
@@ -105,6 +79,6 @@ export default function* rootSaga() {
     watchSaveSettings(),
     watchFetchSettings(),
     fetchSettings(),
-    watchUpdateTile(),
+    watchOpenTileTemporary(),
   ]);
 }

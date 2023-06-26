@@ -5,7 +5,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  border: none;
+  background: none;
 
   &.opened-tile {
     background: radial-gradient(circle, rgba(255 255 255 / 100%) -50%, rgba(255 255 255 / 0%) 70%);

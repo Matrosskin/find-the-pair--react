@@ -1,5 +1,5 @@
-import { emoji } from './constants';
-import { ITileData } from './reducers/board.reducer';
+import { emoji } from '../constants';
+import { ITileData } from '../reducers/board.reducer';
 
 function cutRandomItem(list: string[]): string {
   return list.splice(Math.round(Math.random() * (list.length - 1)), 1)[0];

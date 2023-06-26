@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import './tile.component.scss';
-import { ITileData, updateTile } from '../../reducers/board.reducer';
+import { ITileData, openTileTemporary } from '../../reducers/board.reducer';
 
 type TileProps = {
   tileData: ITileData
@@ -11,47 +11,33 @@ type TileProps = {
 function Tile({ tileData }: TileProps) {
   const dispatch = useDispatch();
 
-  const classNames = `game-tile ${tileData.isOpened ? 'opened-tile' : ''}`;
+  const isTileOpened = tileData.isOpened || tileData.isTemporaryOpened;
+
+  const classNames = `game-tile ${isTileOpened ? 'opened-tile' : ''}`;
 
   const onClick = () => {
-    if (tileData.isOpened) {
-      return;
-    }
-
-    const updatedTileData = {
-      ...tileData,
-      isOpened: true,
-    };
-
-    dispatch(updateTile({ updatedTileData }));
-  };
-
-  const onKeyDown = (event: { code: string }) => {
-    if (event.code === 'Enter' || event.code === 'Space') {
-      onClick();
-    }
+    dispatch(openTileTemporary(tileData.id));
   };
 
   return tileData.isEmpty
-    ? <> </>
+    ? null
     : (
-      <div
+      <button
+        type="button"
         className={classNames}
-        role="button"
-        tabIndex={0}
         onClick={onClick}
-        onKeyDown={onKeyDown}
+        disabled={isTileOpened}
       >
         <svg viewBox="0 0 28 28">
           <text x="14" y="20" textAnchor="middle">
             {
-              tileData.isOpened
+              isTileOpened
                 ? tileData.emoji
                 : '?'
             }
           </text>
         </svg>
-      </div>
+      </button>
     );
 }
 

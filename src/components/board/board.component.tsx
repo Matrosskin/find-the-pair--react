@@ -9,7 +9,7 @@ import {
   GameStatus, IStatus, setLossAction, setPausedAction,
 } from '../../reducers/game-status.reducer';
 import { IGameStore } from '../../store';
-import { generateMap } from '../../utils';
+import { generateMap } from '../../utils/common';
 import GameOver from '../game-over/game-over.component';
 import Winner from '../winner/winner.component';
 
