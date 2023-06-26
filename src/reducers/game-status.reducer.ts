@@ -35,7 +35,7 @@ const {
 
 const newGameAction = createAction(ActionType.NEW_GAME_ACTION);
 
-const reducer = handleActions(
+export const statusReducer = handleActions(
   {
     [combineActions(
       setStartedAction,
@@ -47,24 +47,16 @@ const reducer = handleActions(
       state,
       { payload: { gameStatus } },
     ) => ({ ...state, gameStatus }),
-
-    [ActionType.NEW_GAME_ACTION]: (state) => ({
-      ...state,
-      gameId: state.gameId + 1,
-    }),
   },
   {
     gameStatus: GameStatus.IDLE,
-    gameId: 0,
   },
 );
 
 export interface IStatus {
   gameStatus: GameStatus;
-  gameId: number;
 }
 
-export default reducer;
 export {
   ActionType,
   setStartedAction,

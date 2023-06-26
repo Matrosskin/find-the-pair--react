@@ -6,18 +6,25 @@ enum ActionType {
   OPEN_TILE = 'OPEN_TILE',
   OPEN_TILE_TEMPORARY = 'OPEN_TILE_TEMPORARY',
   CLOSE_TILE_OPENED_TEMPORARY = 'CLOSE_TILE_OPENED_TEMPORARY',
+  OPEN_ALL_TILES = 'OPEN_ALL_TILES',
+  CLOSE_ALL_TILES = 'CLOSE_ALL_TILES',
 }
 
-const setBoard = createAction(ActionType.SET_BOARD, (board: ITileData[]) => ({ board }));
-const openTile = createAction(ActionType.OPEN_TILE, (id: number) => ({ id, isOpened: true, isTemporaryOpened: false }));
-const openTileTemporary = createAction(
+export const setBoard = createAction(ActionType.SET_BOARD, (board: ITileData[]) => ({ board }));
+export const openTile = createAction(
+  ActionType.OPEN_TILE,
+  (id: number) => ({ id, isOpened: true, isTemporaryOpened: false }),
+);
+export const openTileTemporary = createAction(
   ActionType.OPEN_TILE_TEMPORARY,
   (id: number) => ({ id, isTemporaryOpened: true }),
 );
-const closeTileOpenedTemporary: typeof openTileTemporary = createAction(
+export const closeTileOpenedTemporary: typeof openTileTemporary = createAction(
   ActionType.CLOSE_TILE_OPENED_TEMPORARY,
   (id: number) => ({ id, isTemporaryOpened: false }),
 );
+export const openAllTiles = createAction(ActionType.OPEN_ALL_TILES, () => ({ isOpened: true }));
+export const closeAllTiles: typeof openAllTiles = createAction(ActionType.CLOSE_ALL_TILES, () => ({ isOpened: false }));
 
 const handlers = [
   [
@@ -36,9 +43,15 @@ const handlers = [
       state.map((tile) => (tile.id === id ? { ...tile, isTemporaryOpened } : tile))
     ),
   ],
+  [
+    combineActions(openAllTiles, closeAllTiles),
+    (state: ITileData[], { payload }: ReturnType<typeof openAllTiles>) => (
+      state.map((tile) => ({ ...tile, ...payload }))
+    ),
+  ],
 ];
 
-const reducer = handleActions<ITileData[]>(handlers, []);
+export const boardReducer = handleActions<ITileData[]>(handlers, []);
 
 export interface ITileData {
   id: number;
@@ -47,11 +60,3 @@ export interface ITileData {
   isEmpty?: boolean;
   isTemporaryOpened?: boolean;
 }
-
-export default reducer;
-export {
-  setBoard,
-  openTile,
-  openTileTemporary,
-  closeTileOpenedTemporary,
-};

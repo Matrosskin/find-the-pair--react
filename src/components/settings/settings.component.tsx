@@ -5,7 +5,7 @@ import './settings.component.scss';
 import {
   fetchSettings, saveSettings, setBonusTime, setDurationTime, setMapSize,
 } from '../../reducers/settings.reducer';
-import { IGameStore } from '../../store';
+import { IGameStore } from '../../store.interface';
 
 const availableSizes = [3, 4, 5, 6, 7, 8, 9];
 const getSizeLabel = (size: number) => `${size}x${size}`;

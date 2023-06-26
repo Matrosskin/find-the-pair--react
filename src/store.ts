@@ -1,11 +1,13 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import { composeWithDevTools } from '@redux-devtools/extension';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { composeWithDevToolsDevelopmentOnly } from '@redux-devtools/extension';
 
-import settingsReducer, { ISettings } from './reducers/settings.reducer';
-import boardReducer, { ITileData } from './reducers/board.reducer';
-import statusReducer, { IStatus } from './reducers/game-status.reducer';
+import settingsReducer from './reducers/settings.reducer';
+import { boardReducer } from './reducers/board.reducer';
+import { statusReducer } from './reducers/game-status.reducer';
 import rootSaga from './sagas';
+import { timerReducer } from './reducers/timer.reducer';
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -14,17 +16,12 @@ const store = createStore(
     settings: settingsReducer,
     board: boardReducer,
     status: statusReducer,
+    timer: timerReducer,
   }),
-  composeWithDevTools(
+  composeWithDevToolsDevelopmentOnly(
     applyMiddleware(sagaMiddleware),
   ),
 );
-
-export interface IGameStore {
-  settings: ISettings;
-  board: ITileData[];
-  status: IStatus;
-}
 
 sagaMiddleware.run(rootSaga);
 

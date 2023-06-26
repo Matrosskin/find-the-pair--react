@@ -4,78 +4,44 @@ import { connect } from 'react-redux';
 import './board.component.scss';
 import { ISettings } from '../../reducers/settings.reducer';
 import Tile from '../tile/tile.component';
-import { ITileData, setBoard } from '../../reducers/board.reducer';
+import { ITileData } from '../../reducers/board.reducer';
 import {
-  GameStatus, IStatus, setLossAction, setPausedAction,
+  GameStatus, IStatus, setPausedAction,
 } from '../../reducers/game-status.reducer';
-import { IGameStore } from '../../store';
-import { generateMap } from '../../utils/common';
+import { IGameStore } from '../../store.interface';
 import GameOver from '../game-over/game-over.component';
 import Winner from '../winner/winner.component';
+import { IGameTimer } from '../../reducers/timer.reducer';
 
 type BoardProps = {
   board: ITileData[],
   settings: ISettings,
   status: IStatus,
-  setBoardState: (board: ITileData[]) => void,
+  timer: IGameTimer,
   setPaused: () => void,
-  setLoss: () => void,
-};
-
-type BoardState = {
-  leftTime: number;
-  gameId: number;
-  intervalId?: number;
 };
 
 const mapStateToProps = (state: IGameStore) => ({
   board: state.board,
   settings: state.settings,
   status: state.status,
+  timer: state.timer,
 });
 
 // TODO: Need to investigate how to properly define type for "dispatch" argument.
 const mapDispatchToProps = (dispatch: any) => ({
-  setBoardState: (newState: ITileData[]) => dispatch(setBoard(newState)),
   setPaused: () => dispatch(setPausedAction()),
-  setLoss: () => dispatch(setLossAction()),
 });
 
 const connectToStore = connect(mapStateToProps, mapDispatchToProps);
 
-class Board extends React.Component<BoardProps, BoardState> {
-  static formatTime(time: number): string {
-    const minutes = Math.trunc(time / 60);
-    const seconds = time % 60;
-    return `${minutes}:${seconds}`;
-  }
+function formatTime(time: number): string {
+  const minutes = Math.trunc(time / 60);
+  const seconds = time % 60;
+  return `${minutes}:${seconds}`;
+}
 
-  constructor(props: BoardProps) {
-    super(props);
-
-    this.state = {
-      leftTime: 0,
-      gameId: 0,
-    };
-  }
-
-  componentDidMount(): void {
-    this.recreateBoardIfSettingsChanged();
-  }
-
-  componentDidUpdate() {
-    const { status: { gameStatus } } = this.props;
-    const { intervalId } = this.state;
-    if ((gameStatus === GameStatus.WIN || gameStatus === GameStatus.LOSS) && intervalId) {
-      clearInterval(intervalId);
-      this.setState((state) => ({
-        ...state,
-        intervalId: undefined,
-      }));
-    }
-    this.recreateBoardIfSettingsChanged();
-  }
-
+class Board extends React.Component<BoardProps> {
   getTiles() {
     const { board, settings: { mapSize: size } } = this.props;
     if (!board) {
@@ -98,77 +64,8 @@ class Board extends React.Component<BoardProps, BoardState> {
     return boardCells;
   }
 
-  private recreateBoardIfSettingsChanged() {
-    const { status: { gameId } } = this.props;
-    const { gameId: currentGameId } = this.state;
-    if (currentGameId === gameId) {
-      return;
-    }
-
-    this.setState((state) => ({
-      ...state,
-      gameId,
-    }));
-    this.startNewGame();
-  }
-
-  startNewGame() {
-    const { setBoardState, settings: { mapSize, durationTime, bonusTime } } = this.props;
-
-    const allCells: ITileData[] = generateMap(mapSize);
-    setBoardState(allCells);
-
-    this.setState((state) => ({
-      ...state,
-      leftTime: durationTime * 60,
-    }));
-
-    setTimeout(() => {
-      setBoardState(allCells.map((tile) => ({
-        ...tile,
-        isOpened: false,
-      })));
-
-      const { intervalId } = this.state;
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-
-      const newIntervalId = window.setInterval(() => {
-        const { status: { gameStatus }, setLoss } = this.props;
-
-        if (gameStatus === GameStatus.PAUSED) {
-          return;
-        }
-
-        this.setState((state) => {
-          const leftTime = state.leftTime - 1;
-          let { intervalId: actualIntId } = state;
-
-          if (leftTime <= 0) {
-            clearInterval(state.intervalId);
-            actualIntId = undefined;
-            setLoss();
-          }
-
-          return {
-            ...state,
-            leftTime,
-            intervalId: actualIntId,
-          };
-        });
-      }, 1000);
-
-      this.setState((state) => ({
-        ...state,
-        intervalId: newIntervalId,
-      }));
-    }, bonusTime * 1000);
-  }
-
   render() {
-    const { setPaused, status: { gameStatus } } = this.props;
-    const { leftTime } = this.state;
+    const { setPaused, status: { gameStatus }, timer: { leftTime } } = this.props;
     const isPaused = gameStatus === GameStatus.PAUSED;
 
     const isStarted = gameStatus === GameStatus.STARTED;
@@ -181,7 +78,7 @@ class Board extends React.Component<BoardProps, BoardState> {
       <div className={`game-board ${isPaused ? 'invisible' : ''}`}>
         <div className="board-header card">
           {/* eslint-disable-next-line react/jsx-one-expression-per-line */}
-          <span>Time left: {Board.formatTime(leftTime)}</span>
+          <span>Time left: {formatTime(leftTime)}</span>
           { isStarted
             && <button type="button" className="game-btn blue-btn" onClick={setPaused}>Pause</button> }
         </div>

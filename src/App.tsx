@@ -5,7 +5,7 @@ import './App.scss';
 import Settings from './components/settings/settings.component';
 import Board from './components/board/board.component';
 import { GameStatus, newGameAction, setStartedAction } from './reducers/game-status.reducer';
-import { IGameStore } from './store';
+import { IGameStore } from './store.interface';
 
 function App() {
   const {
@@ -27,7 +27,6 @@ function App() {
 
   const onStartGame = () => {
     dispatch(newGameAction());
-    dispatch(setStartedAction());
   };
 
   const onResumeGame = () => {
