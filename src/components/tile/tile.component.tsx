@@ -1,14 +1,16 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './tile.component.scss';
-import { ITileData, openTileTemporary } from '../../reducers/board.reducer';
+import { openTileTemporary } from '../../reducers/board.reducer';
+import { IGameStore } from '../../store.interface';
 
 type TileProps = {
-  tileData: ITileData
+  tileIndex: number,
 };
 
-function Tile({ tileData }: TileProps) {
+function Tile({ tileIndex }: TileProps) {
+  const tileData = useSelector((store: IGameStore) => store.board[tileIndex]);
   const dispatch = useDispatch();
 
   const isTileOpened = tileData.isOpened || tileData.isTemporaryOpened;

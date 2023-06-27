@@ -25,36 +25,3 @@
     max-width: 900px;
   }
 }
-
-.board-header {
-  padding: 20px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.board-body {
-  font-size: initial;
-}
-
-.board-line {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba( 255 255 255 / 18% );
-
-  &:last-of-type {
-    border-bottom: none;
-  }
-}
-
-.board-cell {
-  flex: 1 1 0;
-  aspect-ratio: 1;
-  border-right: 1px solid rgba( 255 255 255 / 18% );
-
-  &:last-of-type {
-    border-right: none;
-  }
-}

@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import './App.scss';
 import Settings from './components/settings/settings.component';
 import Board from './components/board/board.component';
-import { GameStatus, newGameAction, setStartedAction } from './reducers/game-status.reducer';
-import { IGameStore } from './store.interface';
+import { newGameAction, setStartedAction } from './reducers/game-status.reducer';
+import { gameStatusSelector } from './selectors';
 
 function App() {
   const {
@@ -14,15 +14,7 @@ function App() {
     isGameStarted,
     isGameWin,
     isGameLoss,
-  } = useSelector(
-    (state: IGameStore) => ({
-      isGamePaused: state.status.gameStatus === GameStatus.PAUSED,
-      isGameStarted: state.status.gameStatus === GameStatus.STARTED,
-      isGameIdle: state.status.gameStatus === GameStatus.IDLE,
-      isGameWin: state.status.gameStatus === GameStatus.WIN,
-      isGameLoss: state.status.gameStatus === GameStatus.LOSS,
-    }),
-  );
+  } = useSelector(gameStatusSelector);
   const dispatch = useDispatch();
 
   const onStartGame = () => {

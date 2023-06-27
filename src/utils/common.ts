@@ -32,12 +32,8 @@ export function generateMap(mapSize: number) {
   return allCells;
 }
 
-export function updateBoard(board: ITileData[], updatedTiles: ITileData[]): ITileData[] {
-  const updatedBoard = [...board];
-  updatedTiles.forEach((tileData) => {
-    const index = updatedBoard.findIndex((tile) => tile.id === tileData.id);
-    updatedBoard.splice(index, 1, tileData);
-  });
-
-  return updatedBoard;
+export function formatTime(time: number): string {
+  const minutes = Math.trunc(time / 60);
+  const seconds = time % 60;
+  return `${minutes}:${seconds}`;
 }
