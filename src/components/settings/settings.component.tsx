@@ -6,9 +6,16 @@ import {
   fetchSettings, saveSettings, setBonusTime, setDurationTime, setMapSize,
 } from '../../reducers/settings.reducer';
 import { IGameStore } from '../../store.interface';
+import WrappedInput from '../wrapped-input/wrapped-input.component';
+import WrappedSelect, { SizeOptionItem } from '../wrapped-select/wrapped-select.component';
 
-const availableSizes = [3, 4, 5, 6, 7, 8, 9];
 const getSizeLabel = (size: number) => `${size}x${size}`;
+const availableSizes = [3, 4, 5, 6, 7, 8, 9];
+const sizeOptions: SizeOptionItem[] = availableSizes.map((size) => ({
+  key: size,
+  value: size,
+  label: getSizeLabel(size),
+}));
 
 type SettingsProps = {
   isGamePaused: boolean,
@@ -37,56 +44,29 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
     <div className="settings-form card">
       <h1>Settings</h1>
 
-      <div className="form-line">
-        {/* TODO: Need to find e reason why this rule triggers an error even if I used 'htmlFor' */}
-        { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-        <label htmlFor="bonusTime">
-          Time to see all pictures at start (sec):
-        </label>
-        <input
-          type="number"
-          name="bonusTime"
-          id="bonusTime"
-          className="game-input"
-          value={settingsData.bonusTime}
-          onChange={(event) => dispatch(setBonusTime({ bonusTime: event.target.valueAsNumber }))}
-        />
-      </div>
+      <WrappedInput
+        label="Time to see all pictures at start (sec):"
+        name="bonusTime"
+        type="number"
+        value={settingsData.bonusTime}
+        onChange={(bonusTime) => dispatch(setBonusTime({ bonusTime }))}
+      />
 
-      <div className="form-line">
-        {/* TODO: Need to find e reason why this rule triggers an error even if I used 'htmlFor' */}
-        { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-        <label htmlFor="sizeOfMap">
-          Size of the map:
-        </label>
-        <select
-          name="sizeOfMap"
-          id="sizeOfMap"
-          className="game-select"
-          value={settingsData.mapSize}
-          onChange={(event) => dispatch(setMapSize({ mapSize: +event.target.value }))}
-        >
-          { availableSizes.map((size) => (
-            <option value={size} key={size}>{ getSizeLabel(size) }</option>
-          )) }
-        </select>
-      </div>
+      <WrappedSelect
+        label="Size of the map:"
+        value={settingsData.mapSize}
+        name="sizeOfMap"
+        options={sizeOptions}
+        onChange={(mapSize) => dispatch(setMapSize({ mapSize }))}
+      />
 
-      <div className="form-line">
-        {/* TODO: Need to find e reason why this rule triggers an error even if I used 'htmlFor' */}
-        { /* eslint-disable-next-line jsx-a11y/label-has-associated-control */ }
-        <label htmlFor="gameDuration">
-          Duration of the game (min):
-        </label>
-        <input
-          type="number"
-          name="gameDuration"
-          id="gameDuration"
-          className="game-input"
-          value={settingsData.durationTime}
-          onChange={(event) => dispatch(setDurationTime({ durationTime: event.target.valueAsNumber }))}
-        />
-      </div>
+      <WrappedInput
+        label="Duration of the game (min):"
+        name="durationTime"
+        type="number"
+        value={settingsData.durationTime}
+        onChange={(durationTime) => dispatch(setDurationTime({ durationTime }))}
+      />
 
       <div className="form-line divider" />
 
