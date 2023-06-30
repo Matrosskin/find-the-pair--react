@@ -1,14 +1,14 @@
 import {
-  combineActions, createAction, createActions, handleActions,
+  combineActions, createAction, handleActions,
 } from 'redux-actions';
 
 enum ActionType {
-  SET_STARTED_ACTION = 'SET_STARTED_ACTION',
-  SET_PAUSED_ACTION = 'SET_PAUSED_ACTION',
-  SET_WIN_ACTION = 'SET_WIN_ACTION',
-  SET_LOSS_ACTION = 'SET_LOSS_ACTION',
-  SET_IDLE_ACTION = 'SET_IDLE_ACTION',
-  NEW_GAME_ACTION = 'NEW_GAME_ACTION',
+  SET_STARTED = 'SET_STARTED',
+  SET_PAUSED = 'SET_PAUSED',
+  SET_WIN = 'SET_WIN',
+  SET_LOSS = 'SET_LOSS',
+  SET_IDLE = 'SET_IDLE',
+  NEW_GAME = 'NEW_GAME',
 }
 
 export enum GameStatus {
@@ -19,30 +19,22 @@ export enum GameStatus {
   LOSS,
 }
 
-const {
-  setStartedAction,
-  setPausedAction,
-  setWinAction,
-  setLossAction,
-  setIdleAction,
-} = createActions({
-  [ActionType.SET_STARTED_ACTION]: () => ({ gameStatus: GameStatus.STARTED }),
-  [ActionType.SET_PAUSED_ACTION]: () => ({ gameStatus: GameStatus.PAUSED }),
-  [ActionType.SET_WIN_ACTION]: () => ({ gameStatus: GameStatus.WIN }),
-  [ActionType.SET_LOSS_ACTION]: () => ({ gameStatus: GameStatus.LOSS }),
-  [ActionType.SET_IDLE_ACTION]: () => ({ gameStatus: GameStatus.IDLE }),
-});
+export const setStarted = createAction(ActionType.SET_STARTED, () => ({ gameStatus: GameStatus.STARTED }));
+export const setPaused = createAction(ActionType.SET_PAUSED, () => ({ gameStatus: GameStatus.PAUSED }));
+export const setWin = createAction(ActionType.SET_WIN, () => ({ gameStatus: GameStatus.WIN }));
+export const setLoss = createAction(ActionType.SET_LOSS, () => ({ gameStatus: GameStatus.LOSS }));
+export const setIdle = createAction(ActionType.SET_IDLE, () => ({ gameStatus: GameStatus.IDLE }));
 
-const newGameAction = createAction(ActionType.NEW_GAME_ACTION);
+export const newGame = createAction(ActionType.NEW_GAME);
 
 export const statusReducer = handleActions(
   {
     [combineActions(
-      setStartedAction,
-      setPausedAction,
-      setWinAction,
-      setLossAction,
-      setIdleAction,
+      setStarted,
+      setPaused,
+      setWin,
+      setLoss,
+      setIdle,
     ) as unknown as string]: (
       state,
       { payload: { gameStatus } },
@@ -56,13 +48,3 @@ export const statusReducer = handleActions(
 export interface IStatus {
   gameStatus: GameStatus;
 }
-
-export {
-  ActionType,
-  setStartedAction,
-  setPausedAction,
-  setWinAction,
-  setLossAction,
-  setIdleAction,
-  newGameAction,
-};

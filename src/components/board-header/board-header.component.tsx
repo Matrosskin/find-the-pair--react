@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import './board-header.component.scss';
 import { formatTime } from '../../utils/common';
-import { setPausedAction } from '../../reducers/game-status.reducer';
+import { setPaused } from '../../reducers/game-status.reducer';
 import { gameStatusSelector, leftTimeSelector } from '../../selectors';
 
 function BoardHeader() {
@@ -11,7 +11,7 @@ function BoardHeader() {
   const { isGameStarted } = useSelector(gameStatusSelector);
   const dispatch = useDispatch();
 
-  const onPauseClick = useCallback(() => { dispatch(setPausedAction()); }, []);
+  const onPauseClick = useCallback(() => { dispatch(setPaused()); }, []);
 
   return (
     <div className="board-header card">

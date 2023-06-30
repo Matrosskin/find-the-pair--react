@@ -1,40 +1,43 @@
-import { createAction, handleActions } from 'redux-actions';
+import { Action, combineActions, createAction } from 'redux-actions';
+import { handleActions } from '../utils/redux-actions';
 
 enum ActionType {
-  SET_BONUS_TIME = 'SET_BONUS_TIME_ACTION',
-  SET_MAP_SIZE = 'SET_MAP_SIZE_ACTION',
-  SET_DURATION_TIME = 'SET_DURATION_TIME_ACTION',
-  SAVE_SETTINGS = 'SAVE_SETTINGS_ACTION',
-  FETCH_SETTINGS = 'FETCH_SETTINGS_ACTION',
-  SETTINGS_FETCHED = 'SETTINGS_FETCHED_ACTION',
+  SET_BONUS_TIME = 'SET_BONUS_TIME',
+  SET_MAP_SIZE = 'SET_MAP_SIZE',
+  SET_DURATION_TIME = 'SET_DURATION_TIME',
+
+  // Saga's actions
+  SAVE_SETTINGS = 'SAVE_SETTINGS',
+  FETCH_SETTINGS = 'FETCH_SETTINGS',
+  SETTINGS_FETCHED = 'SETTINGS_FETCHED',
 }
 
-const setBonusTime = createAction(ActionType.SET_BONUS_TIME);
-const setMapSize = createAction(ActionType.SET_MAP_SIZE);
-const setDurationTime = createAction(ActionType.SET_DURATION_TIME);
+export const setBonusTime = createAction(ActionType.SET_BONUS_TIME, (bonusTime: number) => ({ bonusTime }));
+export const setMapSize = createAction(ActionType.SET_MAP_SIZE, (mapSize: number) => ({ mapSize }));
+export const setDurationTime = createAction(ActionType.SET_DURATION_TIME, (durationTime: number) => ({ durationTime }));
+export const settingsFetched = createAction<ISettings>(ActionType.SETTINGS_FETCHED);
 
-const saveSettings = createAction(ActionType.SAVE_SETTINGS);
-const fetchSettings = createAction(ActionType.FETCH_SETTINGS);
-const settingsFetched = createAction(ActionType.SETTINGS_FETCHED);
+// Saga's actions
+export const saveSettings = createAction<void>(ActionType.SAVE_SETTINGS);
+export const fetchSettings = createAction<void>(ActionType.FETCH_SETTINGS);
 
-const reducer = handleActions<ISettings>(
-  {
-    [ActionType.SET_BONUS_TIME]: (state, action) => ({
+const handlers = [
+  [
+    combineActions(
+      setBonusTime,
+      setMapSize,
+      setDurationTime,
+      settingsFetched,
+    ),
+    (state: ISettings, { payload }: Action<Partial<ISettings>>) => ({
       ...state,
-      bonusTime: action.payload.bonusTime,
+      ...payload,
     }),
-    [ActionType.SET_MAP_SIZE]: (state, action) => ({
-      ...state,
-      mapSize: action.payload.mapSize,
-    }),
-    [ActionType.SET_DURATION_TIME]: (state, action) => ({
-      ...state,
-      durationTime: action.payload.durationTime,
-    }),
-    [ActionType.SETTINGS_FETCHED]: (state, action) => ({
-      ...action.payload,
-    }),
-  },
+  ],
+];
+
+export const settingsReducer = handleActions<ISettings>(
+  handlers,
   {
     bonusTime: 3,
     mapSize: 4,
@@ -47,14 +50,3 @@ export interface ISettings {
   mapSize: number;
   durationTime: number;
 }
-
-export default reducer;
-export {
-  ActionType,
-  setBonusTime,
-  setMapSize,
-  setDurationTime,
-  saveSettings,
-  fetchSettings,
-  settingsFetched,
-};

@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 
 import { setTimer, startTimer, stopTimer } from '../reducers/timer.reducer';
-import { newGameAction, setStartedAction } from '../reducers/game-status.reducer';
+import { newGame, setStarted } from '../reducers/game-status.reducer';
 import { IGameStore } from '../store.interface';
 import {
   ITileData, setBoard, openAllTiles, closeAllTiles,
@@ -13,7 +13,7 @@ import { generateMap } from '../utils/common';
 // eslint-disable-next-line require-yield
 function* onNewGame() {
   yield put(stopTimer());
-  yield put(setStartedAction());
+  yield put(setStarted());
 
   const newGameTime: number = yield select((state: IGameStore) => state.settings.durationTime * 60);
   yield put(setTimer(newGameTime));
@@ -32,5 +32,5 @@ function* onNewGame() {
 
 // eslint-disable-next-line import/prefer-default-export
 export function* watchNewGameAction() {
-  yield takeEvery(newGameAction, onNewGame);
+  yield takeEvery(newGame, onNewGame);
 }

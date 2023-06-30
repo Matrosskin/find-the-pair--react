@@ -2,7 +2,7 @@ import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
-import { setIdleAction } from '../../reducers/game-status.reducer';
+import { setIdle } from '../../reducers/game-status.reducer';
 
 function Winner() {
   const dispatch = useDispatch();
@@ -10,7 +10,7 @@ function Winner() {
   return (
     <div className="win-card">
       <div>🥳</div>
-      <button type="button" className="game-btn blue-btn" onClick={() => dispatch(setIdleAction())}>
+      <button type="button" className="game-btn blue-btn" onClick={() => dispatch(setIdle())}>
         Start new game
       </button>
     </div>

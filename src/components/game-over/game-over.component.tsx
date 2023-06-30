@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setIdleAction } from '../../reducers/game-status.reducer';
+import { setIdle } from '../../reducers/game-status.reducer';
 
 function GameOver() {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ function GameOver() {
   return (
     <div className="loss-card">
       <div>☠️</div>
-      <button type="button" className="game-btn blue-btn" onClick={() => dispatch(setIdleAction())}>
+      <button type="button" className="game-btn blue-btn" onClick={() => dispatch(setIdle())}>
         Try again
       </button>
     </div>

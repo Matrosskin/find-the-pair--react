@@ -13,7 +13,7 @@ const getSizeLabel = (size: number) => `${size}x${size}`;
 const availableSizes = [3, 4, 5, 6, 7, 8, 9];
 const sizeOptions: SizeOptionItem[] = availableSizes.map((size) => ({
   key: size,
-  value: size,
+  value: size.toString(),
   label: getSizeLabel(size),
 }));
 
@@ -49,15 +49,15 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
         name="bonusTime"
         type="number"
         value={settingsData.bonusTime}
-        onChange={(bonusTime) => dispatch(setBonusTime({ bonusTime }))}
+        onChange={(bonusTime) => dispatch(setBonusTime(bonusTime))}
       />
 
       <WrappedSelect
         label="Size of the map:"
-        value={settingsData.mapSize}
+        value={settingsData.mapSize.toString()}
         name="sizeOfMap"
         options={sizeOptions}
-        onChange={(mapSize) => dispatch(setMapSize({ mapSize }))}
+        onChange={(mapSize) => dispatch(setMapSize(+mapSize))}
       />
 
       <WrappedInput
@@ -65,7 +65,7 @@ function Settings({ isGamePaused, onStartGame, onResumeGame }: SettingsProps) {
         name="durationTime"
         type="number"
         value={settingsData.durationTime}
-        onChange={(durationTime) => dispatch(setDurationTime({ durationTime }))}
+        onChange={(durationTime: number) => dispatch(setDurationTime(durationTime))}
       />
 
       <div className="form-line divider" />

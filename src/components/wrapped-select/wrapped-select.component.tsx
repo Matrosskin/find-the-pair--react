@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { Key } from 'react';
 
-export type SizeOptionItem = { key: number | string, value: number | string, label: string };
+export type SizeOptionItem = { key: Key, value: string, label: string };
 
 type SelectProps = {
   name: string,
-  value: number | string,
+  value: string,
   label: string,
   options: SizeOptionItem[],
-  onChange: (newValue: number | string) => void
+  onChange: (newValue: string) => void
 };
 
 function WrappedSelect({

@@ -7,7 +7,7 @@ import type { IGameStore } from '../store.interface';
 import {
   startTimer, stopTimer, tickTimer,
 } from '../reducers/timer.reducer';
-import { GameStatus, setLossAction } from '../reducers/game-status.reducer';
+import { GameStatus, setLoss } from '../reducers/game-status.reducer';
 import { waitingForOpeningTilesSelector } from '../selectors';
 import { ITileData } from '../reducers/board.reducer';
 
@@ -52,7 +52,7 @@ function* onStartTimer(): unknown {
 
     const waitingForOpeningTiles: ITileData[] = yield select(waitingForOpeningTilesSelector);
     if (waitingForOpeningTiles.length) {
-      yield put(setLossAction());
+      yield put(setLoss());
       yield onStopTimer();
       return;
     }
